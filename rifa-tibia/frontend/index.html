@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OTDASORTE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=IM+Fell+English:ital@0;1&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ═══ PARTÍCULAS DE FUNDO ═══ -->
+<canvas id="particles"></canvas>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⚔️</span>
+      <span class="logo-text" id="nome-site">OTDASORTE</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#rifa" class="nav-link">A Rifa</a>
+      <a href="#como-funciona" class="nav-link">Como Funciona</a>
+      <a href="#resultado" class="nav-link">Resultado</a>
+      <div id="nav-auth">
+        <button class="btn-ghost" onclick="abrirModal('modal-login')">Entrar</button>
+        <button class="btn-primary" onclick="abrirModal('modal-registro')">Cadastrar</button>
+      </div>
+      <div id="nav-user" style="display:none">
+        <span class="user-nome" id="user-nome-display"></span>
+        <button class="btn-ghost" onclick="logout()">Sair</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-ornament top"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Rifa Oficial ✦</p>
+    <h1 class="hero-title" id="hero-titulo">Ganhe Moedas<br/><em>no Tibia</em></h1>
+    <p class="hero-sub" id="hero-premio">Prêmio: 1000 Rubini Coins </p>
+    <div class="hero-cta">
+      <button class="btn-gold btn-lg" onclick="scrollParaRifa()">Comprar Bilhetes</button>
+      <p class="hero-preco">R$ <span id="hero-preco">0,10</span> por bilhete · Pix instantâneo</p>
+    </div>
+  </div>
+  <div class="hero-ornament bottom"></div>
+</section>
+
+<!-- ═══ PROGRESSO DA RIFA ═══ -->
+<section class="progress-section" id="rifa">
+  <div class="container">
+    <div class="progress-card">
+      <div class="progress-header">
+        <h2 class="section-title">📜 Status da Rifa</h2>
+        <span class="badge-status" id="badge-status">Carregando...</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-num" id="stat-vendidos">—</span>
+          <span class="stat-label">Vendidos</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-disponiveis">—</span>
+          <span class="stat-label">Disponíveis</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-total">—</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-preco">—</span>
+          <span class="stat-label">Por bilhete</span>
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <span class="progress-pct" id="progress-pct">0%</span>
+      </div>
+
+      <!-- COMPRA -->
+      <div class="compra-box" id="compra-box">
+        <h3 class="compra-title">Escolha sua quantidade</h3>
+        <div class="qty-grid">
+          <button class="qty-btn" onclick="setQty(1)">1</button>
+          <button class="qty-btn" onclick="setQty(5)">5</button>
+          <button class="qty-btn" onclick="setQty(10)">10</button>
+          <button class="qty-btn" onclick="setQty(20)">20</button>
+          <button class="qty-btn" onclick="setQty(50)">50</button>
+        </div>
+        <div class="qty-custom-row">
+          <label>Ou digite:</label>
+          <input type="number" id="qty-input" min="1" max="500" value="1" onchange="atualizarResumo()"/>
+        </div>
+        <div class="resumo-compra">
+          <span>Total a pagar:</span>
+          <strong id="total-pagar">R$ 0,10</strong>
+        </div>
+        <button class="btn-gold btn-full" onclick="iniciarCompra()">
+          💰 Gerar Pix e Comprar
+        </button>
+        <p class="compra-hint" id="compra-hint">Faça login para comprar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMO FUNCIONA ═══ -->
+<section class="como-funciona" id="como-funciona">
+  <div class="container">
+    <h2 class="section-title center">Como Funciona</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon">📝</div>
+        <h3>1. Cadastre-se</h3>
+        <p>Crie sua conta grátis com nome, e-mail e senha.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🎟️</div>
+        <h3>2. Escolha bilhetes</h3>
+        <p>Compre quantos quiser por apenas R$ 0,10 cada.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">💳</div>
+        <h3>3. Pague via Pix</h3>
+        <p>QR Code gerado na hora. Confirmação automática em segundos.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🏆</div>
+        <h3>4. Sorteio oficial</h3>
+        <p>Quando todos os bilhetes forem vendidos, sorteamos via Loteria Federal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ RESULTADO ═══ -->
+<section class="resultado-section" id="resultado">
+  <div class="container">
+    <h2 class="section-title center">🏆 Resultado</h2>
+    <div id="resultado-box" class="resultado-card" style="display:none">
+      <p class="resultado-numero">Número sorteado: <strong id="res-numero">—</strong></p>
+      <p class="resultado-ganhador">Ganhador: <strong id="res-ganhador">—</strong></p>
+      <p class="resultado-data" id="res-data"></p>
+    </div>
+    <p id="resultado-pendente" class="resultado-pendente">O sorteio ainda não foi realizado. Aguarde todos os bilhetes serem vendidos!</p>
+  </div>
+</section>
+
+<!-- ═══ MEUS BILHETES ═══ -->
+<section class="meus-bilhetes-section" id="meus-bilhetes" style="display:none">
+  <div class="container">
+    <h2 class="section-title">🎟️ Meus Bilhetes</h2>
+    <div id="lista-bilhetes" class="bilhetes-grid"></div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>⚔️ <span id="footer-nome">Rifa Tibia Gold</span> &mdash; Sorteio via Loteria Federal</p>
+    <p class="footer-sub">
+      <a id="footer-whatsapp" href="#">📱 Contato WhatsApp</a> &nbsp;·&nbsp;
+      <a id="footer-email" href="#">✉️ E-mail</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ═══ MODAIS ═══ -->
+
+<!-- Login -->
+<div class="modal-overlay" id="modal-login" onclick="fecharModalClick(event, 'modal-login')">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modal-login')">✕</button>
+    <h2 class="modal-title">Entrar</h2>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="login-email" placeholder="seu@email.com"/>
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="••••••"/>
+    </div>
+    <button class="btn-gold btn-full" onclick="login()">Entrar</button>
+    <p class="modal-switch">Não tem conta? <a onclick="trocarModal('modal-login','modal-registro')">Cadastre-se</a></p>
+    <p class="msg-erro" id="erro-login"></p>
+  </div>
+</div>
+
+<!-- Registro -->
+<div class="modal-overlay" id="modal-registro" onclick="fecharModalClick(event, 'modal-registro')">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modal-registro')">✕</button>
+    <h2 class="modal-title">Criar Conta</h2>
+    <div class="form-group">
+      <label>Nome</label>
+      <input type="text" id="reg-nome" placeholder="Seu nome"/>
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="reg-email" placeholder="seu@email.com"/>
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="reg-senha" placeholder="mínimo 6 caracteres"/>
+    </div>
+    <button class="btn-gold btn-full" onclick="registrar()">Criar conta</button>
+    <p class="modal-switch">Já tem conta? <a onclick="trocarModal('modal-registro','modal-login')">Entrar</a></p>
+    <p class="msg-erro" id="erro-registro"></p>
+  </div>
+</div>
+
+<!-- Pix -->
+<div class="modal-overlay" id="modal-pix" onclick="fecharModalClick(event, 'modal-pix')">
+  <div class="modal modal-pix">
+    <button class="modal-close" onclick="fecharModal('modal-pix')">✕</button>
+    <h2 class="modal-title">💳 Pague via Pix</h2>
+    <p class="pix-instrucao">Escaneie o QR Code ou copie o código Pix:</p>
+    <div id="pix-qr-wrap">
+      <img id="pix-qr-img" src="" alt="QR Code Pix" class="pix-qr"/>
+    </div>
+    <div class="pix-copia-wrap">
+      <input type="text" id="pix-codigo" readonly/>
+      <button class="btn-ghost" onclick="copiarPix()">Copiar</button>
+    </div>
+    <div class="pix-valor-row">
+      <span>Valor:</span>
+      <strong id="pix-valor">—</strong>
+    </div>
+    <div class="pix-status" id="pix-status">⏳ Aguardando pagamento...</div>
+    <button class="btn-ghost btn-full" onclick="verificarPagamento()">Já paguei — verificar</button>
+    <p class="pix-aviso">Após o pagamento, seus bilhetes serão confirmados automaticamente.</p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
